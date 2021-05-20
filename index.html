@@ -13,7 +13,7 @@
 			body {text-align:center;font-family:arial;padding-top:2vh}
 			textarea, li {text-transform:uppercase}
 			textarea {font-family:arial;width:95%;height:6vh;font-size:5vh;padding:1vh;color:lightgrey}
-			input {font-size:5vh;padding:1vh;color:darkgrey;width:30vw;cursor:pointer}
+			input {font-size:5vh;padding:1vh;color:darkgrey;width:30vw;cursor:pointer;-webkit-appearance: none;border-radius:0;border:solid 1px lightgrey}
 			ul {text-align:left;width:96%;padding:0;margin:0 auto;}
 			ul li {list-style:none;padding:1.5vh 0;font-size:5vh;cursor:pointer;color:lightgrey}
 			@media (max-width: 1000px) {
@@ -42,6 +42,7 @@
 			},
 			clearall = () => {
 				text.value = '';
+				ul.innerHTML = '';
 				text.focus();
 			};
 			create = () => {
