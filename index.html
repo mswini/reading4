@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Reading4</title>
+		<title>Fluency</title>
 		<link rel="icon" href="favicon.ico" type="image/x-icon" />
 		<link rel="apple-touch-icon" href="favicon.ico" />
 		<link rel="apple-touch-icon-precomposed" href="favicon.ico" />
@@ -11,29 +11,36 @@
 		<meta name="viewport" content="minimum-scale=1.0,width=device-width,maximum-scale=1,user-scalable=no" />
 		<style>
 			body {text-align:center;font-family:arial;padding-top:2vh}
+			fieldset {margin:0;padding:0;border:0}
 			textarea, li {text-transform:uppercase}
-			textarea {font-family:arial;width:95%;height:6vh;font-size:5vh;padding:1vh;color:lightgrey}
-			input {font-size:5vh;padding:1vh;color:darkgrey;width:30vw;cursor:pointer;-webkit-appearance: none;border-radius:0;border:solid 1px lightgrey}
+			textarea {font-family:arial;width:95%;height:6vh;font-size:5vh;padding:1vh;}
+			input {font-size:5vh;padding:1vh;width:30vw;cursor:pointer;-webkit-appearance: none;border-radius:0;border:solid 1px lightgrey}
 			ul {text-align:left;width:96%;padding:0;margin:0 auto;}
-			ul li {list-style:none;padding:1.5vh 0;font-size:5vh;cursor:pointer;color:lightgrey}
+			ul li {list-style:none;padding:1.5vh 0;font-size:5vh;cursor:pointer;font-weight:bolder}
 			@media (max-width: 1000px) {
 				textarea {width:90%;height:10vh;font-size:4vh}
 				input {font-size:3vh;width:95%}
 				ul {width:95%}
 				ul li {font-size:4.6vw}
 			}
+			@media (max-width: 500px) {
+				ul li {font-size:6vw}
+			}
 		</style>
 	</head>
 	<body ontouchstart>
+		<fieldset>
 		<textarea autocapitalize="off" autofocus>Look at that big brown bear swim</textarea>
 		<br /><br />
 		<input type="button" value="Clear" onclick="clearall()" />
 		<input type="button" value="Create" onclick="create()" />
+		</fieldset>
 		<br /><br />
 		<ul></ul>
 		<script>
 			var text = document.getElementsByTagName('textarea')[0],
 			ul = document.getElementsByTagName('ul')[0],
+			field = document.getElementsByTagName('fieldset')[0],
 			speak = (txt) => {
 				var word = new SpeechSynthesisUtterance(txt)
 				word.lang = 'en';
@@ -46,20 +53,31 @@
 				text.focus();
 			};
 			create = () => {
-				var val = text.value.replace(/\n/g,'').split(' ').reverse(),tmp = [],
-				colr = ['DC143C','008080','FF4500','4682B4','8A2BE2','D2691E','32CD32'].sort(()=>Math.random()-.5);
-				ul.innerHTML = '';
+				var val = text.value.replace(/\n/g,'').split(' ').reverse(),index = 0,
+				colr = ['DC143C','B22222','FF1493','FF4500','FFA500','DA70D6','FF00FF','663399','6A5ACD','483D8B','32CD32','228B22','808000','008080','00CED1','5F9EA0','4682B4','1E90FF','CD853F'].sort(()=>Math.random()-.5);
+				if(val.length< 1 || val.length>7) return false;
+				ul.innerHTML = ''; field.style.visibility = 'hidden';
 				for(var i= val.length-1;i>-1;i--){
 					var li = document.createElement('li');
-					
-					li.innerText = val.slice(i).reverse().join(' ');
+					li.innerHTML = val.slice(i).reverse().join(' &nbsp;');
 					li.dataset.color = colr[i];
-					li.onclick = function(i) {
+					li.dataset.index = index;
+					li.style.visibility = 'hidden';
+					li.onclick = function(index) {
 						speak(this.innerText);
 						this.style.color = '#'+this.dataset.color;
+						setTimeout(function(index){
+							if(ul.getElementsByTagName('li')[parseInt(index)+1]===undefined) {
+								field.style.visibility = 'visible';
+							}
+							else {
+								ul.getElementsByTagName('li')[parseInt(index)+1].style.visibility = 'visible';
+							}
+						},1500,index = this.dataset.index);
 					};
 					ul.appendChild(li);
+					index++;
 				}
+				ul.getElementsByTagName('li')[0].style.visibility = 'visible';
 			};
-			create();
 		</script>
