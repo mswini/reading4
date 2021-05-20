@@ -15,7 +15,7 @@
 			textarea {font-family:arial;width:95%;height:6vh;font-size:5vh;padding:1vh;color:lightgrey}
 			input {font-size:5vh;padding:1vh;color:darkgrey;width:30vw;cursor:pointer}
 			ul {text-align:left;width:96%;padding:0;margin:0 auto;}
-			ul li {list-style:none;padding:1.5vh 0;font-size:5vh;cursor:pointer;color:darkgrey}
+			ul li {list-style:none;padding:1.5vh 0;font-size:5vh;cursor:pointer;color:lightgrey}
 			@media (max-width: 1000px) {
 				textarea {width:90%;height:10vh;font-size:4vh}
 				input {font-size:3vh;width:95%}
@@ -27,6 +27,7 @@
 	<body ontouchstart>
 		<textarea autocapitalize="off" autofocus>Look at that big brown bear swim</textarea>
 		<br /><br />
+		<input type="button" value="Clear" onclick="clearall()" />
 		<input type="button" value="Create" onclick="create()" />
 		<br /><br />
 		<ul></ul>
@@ -39,15 +40,22 @@
 				word.rate = 1;
 				speechSynthesis.speak(word);
 			},
+			clearall = () => {
+				text.value = '';
+				text.focus();
+			};
 			create = () => {
-				var val = text.value.replace(/\n/g,'').split(' ').reverse(),tmp = [];
+				var val = text.value.replace(/\n/g,'').split(' ').reverse(),tmp = [],
+				colr = ['DC143C','008080','FF4500','4682B4','8A2BE2','D2691E','32CD32'].sort(()=>Math.random()-.5);
 				ul.innerHTML = '';
 				for(var i= val.length-1;i>-1;i--){
 					var li = document.createElement('li');
+					
 					li.innerText = val.slice(i).reverse().join(' ');
-					li.onclick = function() {
+					li.dataset.color = colr[i];
+					li.onclick = function(i) {
 						speak(this.innerText);
-						this.style.color = 'black';
+						this.style.color = '#'+this.dataset.color;
 					};
 					ul.appendChild(li);
 				}
