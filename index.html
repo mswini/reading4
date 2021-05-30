@@ -12,11 +12,11 @@
 		<style>
 			html, body {font-family:arial;height:100%;display:grid;margin:0;padding:0;}
 			fieldset, div {margin:auto;width:85%;padding:0;}
-			fieldset {border:none;text-align:center}
+			fieldset {border:none;text-align:center;height:60%}
 			input {font-size:5vw;padding:1vh;-webkit-appearance: none;border-radius:0;border:solid 1px lightgrey}
 			input[type="text"] {width:98%;}
-			input[type="button"] {width:45%;cursor:pointer}
-			div {display:none;text-align:center;font-size:12vw;cursor:pointer}
+			input[type="button"] {width:45%;cursor:pointer;background-color:#DDDDDD;color:#111111}
+			div {display:none;text-align:center;font-size:12vw;cursor:pointer;}
 			@media (max-width: 1000px) {
 				input {font-size:5vh}
 				div {font-size:11vh}
@@ -25,16 +25,18 @@
 	</head>
 	<body ontouchstart>
 		<fieldset>
-			<input type="text" value="" /><br /><br />
+			<input type="text" value="Look at that big brown bear swim" ondblclick="this.value=''" onkeydown="enter(event)" /><br /><br />
 			<input type="button" value="Create" onclick="create()" />
 		</fieldset>
-		<div class="child" onclick="next()"></div>
+		<div onclick="next()"></div>
 		<script>
 			var words = [], index = 0,
 			fieldset = document.getElementsByTagName('fieldset')[0],
+			text = document.getElementsByTagName('input')[0],
 			div = document.getElementsByTagName('div')[0],
 			create = () => {
-				var source = document.getElementsByTagName('input')[0].value.replace(/\n/g,'').split(' ').reverse(),
+				if(text.value.length < 4) return false;
+				var source = text.value.replace(/\n/g,'').split(' ').reverse(),
 				arr = 0;
 				for(var i= source.length-1; i>-1; i--){
 					words.push(source.slice(i).reverse().join(' '));
@@ -47,13 +49,20 @@
 			},
 			next = () => {
 				if(words.length == index) {
-					fieldset.style.display = "block";
-					div.style.display = "none";
-					index = 0;
+					div.innerText = " ";
+					setTimeout(function(){
+						fieldset.style.display = "block";
+						div.style.display = "none";
+						index = 0;
+						words = [];
+					},1500);
 				}
 				else {
 					div.innerText = words[index];
 					index++;
 				}
+			},
+			enter = (evt) => {
+				if(evt.key == "Enter") create();
 			}
 		</script>
